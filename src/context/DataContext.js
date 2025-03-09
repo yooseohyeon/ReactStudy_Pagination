@@ -18,6 +18,7 @@ export const DataProvider = ({ children }) => {
   const [isSortedByLatest, SetIsSortedByLatest] = useState(true);
   const [isSortedByPeopleCount, SetIsSortedByPeopleCount] = useState(false);
   const [isSortedByInstitutionName, SetIsSortedByInstitutionName] = useState(false);
+  const [showPagination, setShowPagination] = useState(false); // Pagination 렌더링 지연을 위한 상태 추가
 
   const loadData = async (page) => {
     try {
@@ -32,13 +33,14 @@ export const DataProvider = ({ children }) => {
 
       setAllLectures(filteredLectures);
       setTotalItems(filteredLectures.length);
-
-      console.log(filteredLectures)
-      console.log([...new Set(filteredLectures.map(item => item["결제금액(원)"]))])
     } catch (error) {
       setError('Error fetching data');
     } finally {
       setLoading(false);
+
+      setTimeout(() => {
+        setShowPagination(true);
+      }, 10);
     }
   };
   
@@ -86,7 +88,27 @@ export const DataProvider = ({ children }) => {
   }, [currentPage, perPage, AllLectures, FilterOperationType, isSortedByLatest, isSortedByPeopleCount, isSortedByInstitutionName]);
   
   return (
-    <DataContext.Provider value={{ lectures, loading, error, totalItems, currentPage, setCurrentPage, perPage, setPerPage, FilterOperationType, setFilterOperationType, isSortedByLatest, SetIsSortedByLatest, isSortedByPeopleCount, SetIsSortedByPeopleCount, isSortedByInstitutionName, SetIsSortedByInstitutionName }}>
+    <DataContext.Provider
+      value={{
+        lectures,
+        loading,
+        error,
+        totalItems,
+        currentPage,
+        setCurrentPage,
+        perPage,
+        setPerPage,
+        FilterOperationType,
+        setFilterOperationType,
+        isSortedByLatest,
+        SetIsSortedByLatest,
+        isSortedByPeopleCount,
+        SetIsSortedByPeopleCount,
+        isSortedByInstitutionName,
+        SetIsSortedByInstitutionName,
+        showPagination,
+      }}
+    >
       {children}
     </DataContext.Provider>
   );

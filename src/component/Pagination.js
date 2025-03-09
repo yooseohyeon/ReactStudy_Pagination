@@ -4,7 +4,7 @@ import { PageList, PageItem, PaginationButton, PageJump, PageJumpInput, PageJump
 import { MdKeyboardDoubleArrowLeft, MdKeyboardDoubleArrowRight, MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 
 export default function Pagination() {
-  const { totalItems, currentPage, setCurrentPage, perPage, loading } = useContext(DataContext);
+  const { totalItems, currentPage, setCurrentPage, perPage, loading, showPagination } = useContext(DataContext);
   const maxPageButtons = 10;
   const totalPages = Math.ceil(totalItems / perPage);
   const startPage = Math.floor((currentPage - 1) / maxPageButtons) * maxPageButtons + 1;
@@ -32,8 +32,10 @@ export default function Pagination() {
 
   return (
     <> 
-      {loading ? <div></div>
-      :
+      {loading ? (
+        <div></div>
+      ) : (
+        showPagination && ( 
           <nav>
             <PageList>
               <li>
@@ -66,7 +68,7 @@ export default function Pagination() {
                 </PaginationButton>
               </li>
             </PageList>
-            
+              
             <PageJump>
               <PageJumpInput
                 type="number"
@@ -86,7 +88,8 @@ export default function Pagination() {
               </PageJumpButton>
             </PageJump>
           </nav>
-      }
+        )
+      )}
     </>
   )
 }
